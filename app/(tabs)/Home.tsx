@@ -1,8 +1,9 @@
 import AgentData from "@/component/AgentData";
+import CreateAgent from "@/component/CreateAgent";
 import { useNavigation } from "expo-router";
 import { Settings } from "lucide-react-native";
 import React, { useEffect } from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 
 const Home = () => {
   const navigation = useNavigation();
@@ -22,9 +23,18 @@ const Home = () => {
   }, [navigation]);
 
   return (
-    <View className="flex-1 p-4">
-      <AgentData />
-    </View>
+    <FlatList
+      data={[]}
+      renderItem={null}
+      contentContainerStyle={{ gap: 10 }}
+      ListHeaderComponent={
+        <View className="flex flex-col gap-3 p-4">
+          <AgentData isFeature={true} />
+          <CreateAgent />
+          <AgentData isFeature={false} />
+        </View>
+      }
+    />
   );
 };
 

@@ -16,7 +16,7 @@ interface AgentCardProps {
   agent: Agent;
 }
 
-export default function AgentCard({ agent }: AgentCardProps) {
+export default function NonFeatureAgent({ agent }: AgentCardProps) {
   return (
     <View>
       <TouchableOpacity className="min-h-[200px] rounded-2xl bg-WHITE relative overflow-hidden">

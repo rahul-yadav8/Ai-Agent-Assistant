@@ -38,7 +38,12 @@ export default function Index() {
         Your Ultimate AI Personal Agent to make life easier. Try it Today, Completely Free!
       </Text>
       <View className="mt-[50px]">
-        <CustomButton title={"Get Started"} />
+        <CustomButton
+          title={"Get Started"}
+          className="p-4 bg-PRIMARY rounded-xl"
+          textClassName="text-base font-semibold text-center text-WHITE"
+          onPress={() => router.push("/(tabs)/Home")}
+        />
       </View>
     </View>
   );

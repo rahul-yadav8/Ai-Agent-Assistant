@@ -1,18 +1,33 @@
-import { router } from "expo-router";
 import React from "react";
 import { Text, TouchableOpacity } from "react-native";
 
-interface customButtonProps {
+interface CustomButtonProps {
   title: string;
+  onPress?: () => void;
+  className?: string;
+  textClassName?: string;
+  disabled?: boolean;
 }
 
-export default function CustomButton({ title }: customButtonProps) {
+export default function CustomButton({
+  title,
+  onPress,
+  className = "",
+  textClassName = "",
+  disabled = false,
+}: CustomButtonProps) {
   return (
     <TouchableOpacity
-      className="w-full p-4 rounded-lg bg-PRIMARY"
-      onPress={() => router.push("./(tabs)/Home")}
+      onPress={onPress}
+      disabled={disabled}
+      className={`
+        items-center justify-center
+        ${disabled ? "opacity-50" : ""}
+        ${className}
+      `}
+      activeOpacity={0.8}
     >
-      <Text className="text-base font-semibold text-center text-WHITE">{title}</Text>
+      <Text className={textClassName}>{title}</Text>
     </TouchableOpacity>
   );
 }

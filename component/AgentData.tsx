@@ -1,10 +1,13 @@
 import { agents } from "@/shared/AgentList";
+import { useRouter } from "expo-router";
 import React from "react";
-import { FlatList, View } from "react-native";
+import { FlatList, TouchableOpacity, View } from "react-native";
 import AgentCard from "./AgentCard";
 import NonFeatureAgent from "./NonFeatureAgent";
 
 export default function AgentData({ isFeature }: { isFeature: boolean }) {
+  const router = useRouter();
+
   const filteredAgent = agents.filter((item) => item.featured === isFeature);
 
   return (
@@ -13,11 +16,22 @@ export default function AgentData({ isFeature }: { isFeature: boolean }) {
         data={filteredAgent}
         numColumns={2}
         keyExtractor={(item) => item.id.toString()}
-        columnWrapperStyle={{ gap: 10 }}
         renderItem={({ item }) => (
-          <View className="flex-1">
+          <TouchableOpacity
+            style={{ flex: 1, padding: 5 }}
+            onPress={() =>
+              router.push({
+                pathname: "/chat",
+                params: {
+                  agentName: item.name,
+                  initialText: item.initialText,
+                  initialPrompt: item.prompt,
+                },
+              })
+            }
+          >
             {isFeature ? <AgentCard agent={item} /> : <NonFeatureAgent agent={item} />}
-          </View>
+          </TouchableOpacity>
         )}
       />
     </View>

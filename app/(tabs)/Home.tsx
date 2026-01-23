@@ -26,7 +26,6 @@ const Home = () => {
     <FlatList
       data={[]}
       renderItem={null}
-      contentContainerStyle={{ gap: 10 }}
       ListHeaderComponent={
         <View className="flex flex-col gap-3 p-4">
           <AgentData isFeature={true} />

@@ -1,11 +1,14 @@
 import { AiChatModal } from "@/shared/GlobalApi";
 import * as Clipboard from "expo-clipboard";
+import * as ImagePicker from "expo-image-picker";
 import { useLocalSearchParams, useNavigation } from "expo-router";
-import { Camera, Copy, Plus, Send } from "lucide-react-native";
+import { Camera, Copy, Plus, Send, X } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
+  Alert,
   FlatList,
+  Image,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -26,6 +29,7 @@ export default function ChatUi() {
   const [inputVal, setInputVal] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [hasInitialized, setHasInitialized] = useState(false);
+  const [image, setImage] = useState<string | null>(null);
 
   const { agentName, initialText, initialPrompt } = useLocalSearchParams();
   const navigation = useNavigation();
@@ -101,6 +105,26 @@ export default function ChatUi() {
     });
   };
 
+  const pickImage = async () => {
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (!permissionResult.granted) {
+      Alert.alert("Permission required", "Permission to access the media library is required.");
+      return;
+    }
+
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ["images"],
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
+
   return (
     <KeyboardAvoidingView
       className="flex-1"
@@ -147,19 +171,38 @@ export default function ChatUi() {
           );
         }}
       />
-      <View className="flex-row items-center gap-2 p-3 border border-[#ccc] rounded-lg">
-        <TouchableOpacity>
-          <Camera />
-        </TouchableOpacity>
-        <TextInput
-          placeholder="Type a message..."
-          className="flex-1 w-full p-2 px-3 border rounded-full bg-WHITE"
-          onChangeText={setInputVal}
-          value={inputVal}
-        />
-        <TouchableOpacity className="p-2 rounded-full bg-PRIMARY" onPress={handleAsk}>
-          <Send color="white" size={20} />
-        </TouchableOpacity>
+      <View>
+        {image && (
+          <View className="flex-row">
+            <Image
+              source={{ uri: image }}
+              style={{
+                width: 50,
+                height: 50,
+                borderRadius: 8,
+                marginBottom: 6,
+                marginLeft: 13,
+              }}
+            />
+            <TouchableOpacity onPress={() => setImage(null)}>
+              <X />
+            </TouchableOpacity>
+          </View>
+        )}
+        <View className="flex-row items-center gap-2 p-3 border border-[#ccc] rounded-lg">
+          <TouchableOpacity onPress={pickImage}>
+            <Camera size={25} />
+          </TouchableOpacity>
+          <TextInput
+            placeholder="Type a message..."
+            className="flex-1 w-full p-2 px-3 border rounded-xl bg-WHITE"
+            onChangeText={setInputVal}
+            value={inputVal}
+          />
+          <TouchableOpacity className="p-2 rounded-full bg-PRIMARY" onPress={handleAsk}>
+            <Send color="white" size={20} />
+          </TouchableOpacity>
+        </View>
       </View>
     </KeyboardAvoidingView>
   );

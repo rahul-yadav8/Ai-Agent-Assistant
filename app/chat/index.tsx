@@ -45,9 +45,9 @@ export default function ChatUi() {
   useEffect(() => {
     if (hasInitialized) return;
 
-    if (typeof initialText === "string") {
-      setInputVal(initialText);
-    }
+    // if (typeof initialText === "string") {
+    //   setInputVal(initialText);
+    // }
 
     if (typeof initialPrompt === "string" && initialPrompt.trim()) {
       setMessages([
@@ -195,7 +195,7 @@ export default function ChatUi() {
           </TouchableOpacity>
           <TextInput
             placeholder="Type a message..."
-            className="flex-1 w-full p-2 px-3 border rounded-xl bg-WHITE"
+            className="flex-1 w-full p-2 px-3 border border-LIGHT_GRAY rounded-xl bg-WHITE"
             onChangeText={setInputVal}
             value={inputVal}
           />

@@ -1,6 +1,7 @@
 import CustomButton from "@/component/Ui/CustomButton";
+import { AgentContext } from "@/context/AgentContext";
 import { useNavigation, useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { KeyboardAvoidingView, Platform, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Toast from "react-native-toast-message";
 import { EmojiKeyboard } from "rn-emoji-keyboard";
@@ -12,6 +13,7 @@ export default function CreateAgent() {
   const [isOpen, setIsOpen] = useState(false);
   const navigation = useNavigation();
   const router = useRouter();
+  const { getAgentData } = useContext(AgentContext);
 
   useEffect(() => {
     navigation.setOptions({
@@ -21,7 +23,7 @@ export default function CreateAgent() {
   }, [navigation]);
 
   const createAgent = () => {
-    if (!agentName || !instruction) {
+    if (!agentName || !instruction! || !emoji) {
       return Toast.show({
         type: "error",
         text1: "Please fill all the fields",
@@ -42,6 +44,7 @@ export default function CreateAgent() {
           initialPrompt: instruction,
         },
       });
+      getAgentData({ agentName, initialPrompt: instruction, emoji });
     }
     setAgentName("");
     setInstruction("");

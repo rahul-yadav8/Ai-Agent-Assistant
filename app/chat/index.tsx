@@ -3,7 +3,7 @@ import * as Clipboard from "expo-clipboard";
 import * as ImagePicker from "expo-image-picker";
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import { Camera, Copy, Plus, Send, X } from "lucide-react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
@@ -30,6 +30,7 @@ export default function ChatUi() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [hasInitialized, setHasInitialized] = useState(false);
   const [image, setImage] = useState<string | null>(null);
+  const flatListRef = useRef<FlatList>(null);
 
   const { agentName, initialText, initialPrompt } = useLocalSearchParams();
   const navigation = useNavigation();
@@ -45,10 +46,6 @@ export default function ChatUi() {
   useEffect(() => {
     if (hasInitialized) return;
 
-    // if (typeof initialText === "string") {
-    //   setInputVal(initialText);
-    // }
-
     if (typeof initialPrompt === "string" && initialPrompt.trim()) {
       setMessages([
         {
@@ -60,6 +57,15 @@ export default function ChatUi() {
 
     setHasInitialized(true);
   }, [initialText, initialPrompt, hasInitialized]);
+
+  useEffect(() => {
+    // Scroll to bottom when messages change
+    if (messages.length > 0) {
+      setTimeout(() => {
+        flatListRef.current?.scrollToEnd({ animated: true });
+      }, 100);
+    }
+  }, [messages]);
 
   const handleAsk = async () => {
     if (!inputVal.trim()) return;
@@ -127,15 +133,18 @@ export default function ChatUi() {
 
   return (
     <KeyboardAvoidingView
-      className="flex-1"
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={80}
+      className="flex-1 bg-white"
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}
     >
+      {/* Messages List */}
       <FlatList
+        ref={flatListRef}
         data={messages}
+        className="flex-1"
         contentContainerStyle={{
           paddingTop: 10,
-          paddingBottom: 120,
+          paddingBottom: 20,
           paddingHorizontal: 16,
         }}
         renderItem={({ item, index }) => {
@@ -170,36 +179,56 @@ export default function ChatUi() {
             </View>
           );
         }}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+        onContentSizeChange={() => {
+          if (messages.length > 0) {
+            flatListRef.current?.scrollToEnd({ animated: true });
+          }
+        }}
       />
-      <View>
+
+      {/* Input Container */}
+      <View className="p-3 bg-white border-t border-gray-200">
         {image && (
-          <View className="flex-row">
+          <View className="flex-row items-center mb-2">
             <Image
               source={{ uri: image }}
               style={{
                 width: 50,
                 height: 50,
                 borderRadius: 8,
-                marginBottom: 6,
-                marginLeft: 13,
+                marginRight: 10,
               }}
             />
-            <TouchableOpacity onPress={() => setImage(null)}>
-              <X />
+            <TouchableOpacity
+              onPress={() => setImage(null)}
+              className="absolute p-1 bg-gray-300 rounded-full -top-2 -right-2"
+            >
+              <X size={16} color="white" />
             </TouchableOpacity>
           </View>
         )}
-        <View className="flex-row items-center gap-2 p-3 border border-[#ccc] rounded-lg">
-          <TouchableOpacity onPress={pickImage}>
-            <Camera size={25} />
+
+        <View className="flex-row items-center gap-2">
+          <TouchableOpacity onPress={pickImage} className="p-2 bg-gray-100 rounded-full">
+            <Camera size={22} color="#555" />
           </TouchableOpacity>
+
           <TextInput
             placeholder="Type a message..."
-            className="flex-1 w-full p-2 px-3 border border-LIGHT_GRAY rounded-xl bg-WHITE"
+            className="flex-1 p-3 border border-LIGHT_GRAY rounded-xl bg-WHITE"
             onChangeText={setInputVal}
             value={inputVal}
+            multiline
+            maxLength={500}
           />
-          <TouchableOpacity className="p-2 rounded-full bg-PRIMARY" onPress={handleAsk}>
+
+          <TouchableOpacity
+            className="p-3 rounded-full bg-PRIMARY"
+            onPress={handleAsk}
+            disabled={!inputVal.trim()}
+          >
             <Send color="white" size={20} />
           </TouchableOpacity>
         </View>

@@ -5,7 +5,7 @@ import { Image, Text, TouchableOpacity, View } from "react-native";
 
 type MenuItem = {
   title: string;
-  path: "/(tabs)/Home" | "/(tabs)/Explore" | "/(tabs)/History";
+  path: "/(tabs)/Home" | "/(tabs)/Explore" | "/(tabs)/History" | "/create-agent";
   icon: React.ReactNode;
 };
 
@@ -13,7 +13,7 @@ const menuItems: MenuItem[] = [
   {
     title: "Create Agent",
     icon: <PlusCircle size={24} color="#4F8EF7" />,
-    path: "/(tabs)/Home",
+    path: "/create-agent",
   },
   {
     title: "Explore",
@@ -48,7 +48,7 @@ const Profile = () => {
       <View className="w-[90%] self-center">
         {menuItems.map((item, index) => (
           <TouchableOpacity
-            className="flex-row py-4 border-b"
+            className="flex-row py-4 border-b border-LIGHT_GRAY"
             key={index}
             onPress={() => router.replace(item.path)}
           >

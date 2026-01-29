@@ -1,5 +1,6 @@
 import AgentData from "@/component/AgentData";
 import CreateAgent from "@/component/CreateAgent";
+import { useAuth } from "@clerk/clerk-expo";
 import { useNavigation } from "expo-router";
 import { Settings } from "lucide-react-native";
 import React, { useEffect } from "react";
@@ -7,12 +8,16 @@ import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 
 const Home = () => {
   const navigation = useNavigation();
+  const { user } = useAuth();
+
+  console.log("chk");
+  console.log("user", user);
 
   useEffect(() => {
     navigation.setOptions({
       headerTitle: () => <Text style={{ fontSize: 18, fontWeight: "bold" }}>AI Agent Assistant</Text>,
       headerLeft: () => (
-        <TouchableOpacity className="flex items-center flex-row gap-2 p-[5px] ml-4 border border-black rounded-[5px] bg-PRIMARY">
+        <TouchableOpacity className="flex items-center flex-row gap-2 p-[5px] ml-4 rounded-[5px] bg-PRIMARY">
           <Text className="text-base font-bold text-WHITE">Pro</Text>
           <Image source={require("../../assets/diamond.png")} className="w-5 h-5" />
         </TouchableOpacity>

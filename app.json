@@ -5,7 +5,10 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "aiagentassistant",
+    "scheme": "myapp",
+    "extra": {
+      "googleClientId": "81911954861-hocbassb5i2kuqq23mmh3fl45jd54bc4.apps.googleusercontent.com"
+    },
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
@@ -49,7 +52,9 @@
             "backgroundColor": "#000000"
           }
         }
-      ]
+      ],
+      "expo-secure-store",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true,

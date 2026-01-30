@@ -1,6 +1,5 @@
 import AgentData from "@/component/AgentData";
 import CreateAgent from "@/component/CreateAgent";
-import { useAuth } from "@clerk/clerk-expo";
 import { useNavigation } from "expo-router";
 import { Settings } from "lucide-react-native";
 import React, { useEffect } from "react";
@@ -8,10 +7,6 @@ import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 
 const Home = () => {
   const navigation = useNavigation();
-  const { user } = useAuth();
-
-  console.log("chk");
-  console.log("user", user);
 
   useEffect(() => {
     navigation.setOptions({

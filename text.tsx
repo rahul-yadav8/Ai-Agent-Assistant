@@ -45,20 +45,20 @@ export default function ChatUi() {
     });
   }, [navigation, agentName]);
 
-  useEffect(() => {
-    if (hasInitialized) return;
+  // useEffect(() => {
+  //   if (hasInitialized) return;
 
-    if (typeof initialPrompt === "string" && initialPrompt.trim()) {
-      setMessages([
-        {
-          role: "assistant",
-          content: initialPrompt,
-        },
-      ]);
-    }
+  //   if (typeof initialPrompt === "string" && initialPrompt.trim()) {
+  //     setMessages([
+  //       {
+  //         role: "assistant",
+  //         content: initialPrompt,
+  //       },
+  //     ]);
+  //   }
 
-    setHasInitialized(true);
-  }, [initialText, initialPrompt, hasInitialized]);
+  //   setHasInitialized(true);
+  // }, [initialText, initialPrompt, hasInitialized]);
 
   useEffect(() => {
     // Scroll to bottom when messages change
@@ -162,7 +162,7 @@ export default function ChatUi() {
         style={{ flex: 1 }}
         contentContainerStyle={{
           paddingTop: 10,
-          // paddingBottom: keyboardHeight,
+          paddingBottom: 100 + keyboardHeight,
           paddingHorizontal: 16,
         }}
         renderItem={({ item, index }) => {
@@ -212,7 +212,7 @@ export default function ChatUi() {
           backgroundColor: "white",
           borderTopWidth: 1,
           borderTopColor: "#E5E5E5",
-          paddingBottom: keyboardHeight > 0 ? keyboardHeight + 10 : 12,
+          paddingBottom: keyboardHeight > 0 ? keyboardHeight : 12,
         }}
       >
         {image && (
